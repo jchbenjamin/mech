@@ -1,51 +1,45 @@
+#ifndef __MECH_HPP__
+#define __MECH_HPP__
+
 #include <iostream>
 #include <vector>
+#include <list>
 #include <algorithm>
 #include <memory>
-#include <boost/graph/adjacency_list.hpp>
+#include "graph.hpp"
 
 namespace mech {
+
 	using std::shared_ptr;
 	using std::vector;
-
-//auction item
-class itemRep {
-	private:
-		std::string desc; //description
-		int order;
-	public:
-		itemRep(const std::string d, const int o) : order(o), desc(d) {};
-};
-
-typedef shared_ptr< itemRep > item;
+	using std::list;
 
 class orderRep {
-	private:
-		int value;
+	public:
 		item before;
 		item after;
-		bool active;
-	public:
-		orderRep(const item a, const item b, const int v) : after(a), before(b), value(v) { active = false; };
+		int value;
+		orderRep(item b, item a, int v) : before(b), after(a), value(v) { }
 };
-
-typedef shared_ptr< orderRep > order;
-
 
 class mechRep {
 	private:
-		std::vector< order > orders;
-		std::vector< item > items;
-		//boost::adjacency_list<> graph;
+		graph g;
+		list< item > solution;
+		vector< orderRep > orders;
+		void topoSort(graph);
+		void topoVisit(node);
+		void fillOrders(graph);
+
 	public:
-		mechRep(void) {};
-		void addOrder(const order);
+		mechRep(void);
+		void addOrder(const item, const item, const int);
 		void addItem(const item);
-		std::vector< item> solve();
+		void solve();
 };
 
-typedef shared_ptr< mechRep > mech;
-
-int testfunc(void);
+typedef shared_ptr< mechRep > mechanism;
 
 };
+
+#endif

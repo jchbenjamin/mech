@@ -1,14 +1,14 @@
-COMP = clang
-CXXFLAGS = -O2 -std=c++0x -lboost_graph
+CC = g++ 
+CXXFLAGS = -O2 -std=c++0x
 
-main: mech.o
-	${COMP} ${CXXFLAGS} -o main main.cpp
+mechanism: mech.o graph.o
+	${CC} ${CXXFLAGS} -o mechanism main.cpp mech.o graph.o
 
-graph.o: mech.o
-	${COMP} ${CXXFLAGS} -c graph.cpp mech.o
+mech.o: graph.o
+	${CC} ${CXXFLAGS} -c mech.cpp
 
-mech.o:
-	${COMP} ${CXXFLAGS} -c mech.cpp
+graph.o:
+	${CC} ${CXXFLAGS} -c graph.cpp
 
 clean:
-	rm *.o main
+	rm *.o mechanism 
